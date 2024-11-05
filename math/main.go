@@ -7,6 +7,6 @@ import (
 )
 
 func main() {
-	fmt.Println(factorial.Factorial(5))
+	fmt.Println(factorial.FactorialRecusion(7))
 
 }

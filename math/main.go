@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	factorial "github.com/rishavmehra/golangPractice/math/Factorial"
+	euclideanalgorithm "github.com/rishavmehra/golangPractice/math/EuclideanAlgorithm"
 )
 
 func main() {
-	fmt.Println(factorial.FactorialRecusion(7))
-
+	// fmt.Println(factorial.FactorialRecusion(7))
+	fmt.Println(euclideanalgorithm.GCD(252, 105))
 }

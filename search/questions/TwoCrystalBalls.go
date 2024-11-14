@@ -3,7 +3,7 @@ package questions
 import "math"
 
 func TwoCrystalBalls(breaks []bool) bool {
-	jumpAmount := math.Floor(math.Sqrt(float64((len(breaks)))))
+	jumpAmount := math.Floor(math.Sqrt(float64(len(breaks)))) // do sqrt here
 
 	i := int(jumpAmount)
 	for i < len(breaks) {

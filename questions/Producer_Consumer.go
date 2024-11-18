@@ -7,41 +7,47 @@ import (
 )
 
 func main() {
-	SingleProducerConsumer()
+	MultiProducerConsumer(100, 50)
 
 }
 
-func SingleProducerConsumer() {
+func MultiProducerConsumer(producerSize int, consumerSize int) {
 	ch := make(chan string)
 	var wg sync.WaitGroup
 
-	wg.Add(1)
-	go SingleProducer(ch, &wg)
-	wg.Add(1)
-	go SingleConsumer(ch, &wg)
+	for i := 0; i < producerSize; i++ {
+		wg.Add(1)
+		go Producer(i, ch, &wg)
+	}
+	for i := 0; i < producerSize; i++ {
+		wg.Add(1)
+		go Consumer(i, ch, &wg)
+	}
+
 	wg.Wait()
 	close(ch)
 }
 
-func SingleProducer(RiCh chan string, wg *sync.WaitGroup) {
-	delay(8)
-	RiCh <- "this the producer Message"
-	wg.Done()
-}
-
-func SingleConsumer(ch chan string, wg *sync.WaitGroup) {
-	select {
-	case msg := <-ch:
-		delay(1)
-		fmt.Println("this is the Consumer, this will receive the Producer msg and here is the Producer msg -> ", msg)
-	case <-time.After(10 * time.Second):
-		fmt.Printf("stop listening to the channel after %d milli seconds", 1)
-		wg.Done()
+func Producer(index int, RiCh chan string, wg *sync.WaitGroup) {
+	for i := 0; i < 5; i++ {
+		RiCh <- fmt.Sprintf("Producer %v send %v", index, i)
 	}
-	fmt.Println("Consumer finishes the job")
 	wg.Done()
 }
 
-func delay(delay int) {
-	time.Sleep(time.Duration(delay) * time.Second)
+func Consumer(index int, ch chan string, wg *sync.WaitGroup) {
+	done := false
+	for !done {
+		select {
+		case msg, ok := <-ch:
+			if !ok {
+				done = true
+			}
+			fmt.Printf("Consumer %v Received: %s\n", index, msg)
+		case <-time.After(10 * time.Second):
+			fmt.Printf("stop listening to the channel after %d milli seconds", 1)
+			wg.Done()
+		}
+	}
+	wg.Done()
 }

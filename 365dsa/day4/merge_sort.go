@@ -6,22 +6,18 @@ func main() {
 	arr := []int{23, 1, 10, 5, 2}
 	res := MergeSort(arr)
 	fmt.Println(res)
-
 }
 
-func MergeSort(items []int) []int {
-	if len(items) < 2 {
-		return items
+func MergeSort(input []int) []int {
+	if len(input) < 2 {
+		return input
 	}
-
-	first := MergeSort(items[:len(items)/2])
-	second := MergeSort(items[len(items)/2:])
-
-	return merge(first, second)
-
+	left := MergeSort(input[:len(input)/2])
+	right := MergeSort(input[len(input)/2:])
+	return merge(left, right)
 }
 
-func merge(a []int, b []int) []int {
+func merge(a, b []int) []int {
 	final := []int{}
 	i := 0
 	j := 0
@@ -34,7 +30,6 @@ func merge(a []int, b []int) []int {
 			j++
 		}
 	}
-
 	for ; i < len(a); i++ {
 		final = append(final, a[i])
 	}
